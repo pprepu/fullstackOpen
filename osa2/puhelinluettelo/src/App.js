@@ -3,6 +3,7 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Message from "./components/Message";
 import personService from "./services/persons";
+import Persons from "./components/Persons";
 
 const App = () => {
 
@@ -185,7 +186,7 @@ const App = () => {
         newNumber={newNumber} handleNumberChange={handleNumberChange} />
       
       <h2>Numbers</h2>
-      <ul>{showPersons()}</ul>
+      <Persons showPersons={showPersons} />
     </div>
   );
 };
