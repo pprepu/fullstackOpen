@@ -7,7 +7,6 @@ const Weather = ({weatherData}) => {
     if (weatherData === "startingValue") {
         return <p>Loading...</p>
     }
-    console.log(key.value);
 
     return (
         <div>
