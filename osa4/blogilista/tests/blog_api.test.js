@@ -180,7 +180,7 @@ describe('adding a user', () => {
     const usersBeforePost = await helper.usersInDb();
 
     const newUser = {
-      username: 'tosiTestaaja',
+      username: 'testaaja',
       name: 'validationERRORtest',
       password: 'jjjalmari'
     };
