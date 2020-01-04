@@ -31,13 +31,13 @@ describe('listing all blogs: ', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/);
   });
-  
+
   test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs');
-  
+
     expect(response.body.length).toBe(helper.initialBlogs.length);
   });
-  
+
   test('returned blogs should have a identifier field called id', async () => {
     const response = await api.get('/api/blogs');
     expect(response.body[0].id).toBeDefined();
@@ -54,65 +54,65 @@ describe('adding blogs: ', () => {
       url: 'justTesting.test',
       likes: 1
     };
-  
+
     await api
       .post('/api/blogs')
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/);
-  
+
     const blogsAfterPost = await helper.blogsInDb();
-  
+
     expect(blogsAfterPost.length).toBe(helper.initialBlogs.length + 1);
-  
+
     const titles = blogsAfterPost.map(blog => blog.title);
     expect(titles).toContain('New BLOG');
-  
+
   });
-  
+
   test('if an added blog has no likes-field, it is set to 0', async () => {
     const newBlog = {
       title: 'New BLOG2',
       author: 'Testaaja',
       url: 'justTesting.test',
     };
-  
+
     const response = await api
       .post('/api/blogs')
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/);
-  
+
     expect(response.body.likes).toBe(0);
   });
-  
+
   test('if an added blog does not have a title field, it is not added and returns code 400', async () => {
     const newBlog = {
       author: 'Testaaja',
       url: 'justTesting.test',
       likes: 1
     };
-  
+
     await api
       .post('/api/blogs')
       .send(newBlog)
       .expect(400);
-    
+
   });
-  
-  
+
+
   test('if an added blog does not have a url field, it is not added and returns code 400', async () => {
     const newBlog = {
       title: 'New BLOG',
       author: 'Testaaja',
       likes: 1
     };
-  
+
     await api
       .post('/api/blogs')
       .send(newBlog)
       .expect(400);
-    
+
   });
 });
 
@@ -161,17 +161,17 @@ describe('adding a user', () => {
       name: 'jalmari k',
       password: 'jjjalmari'
     };
-  
+
     await api
       .post('/api/users')
       .send(newUser)
       .expect(200)
       .expect('Content-Type', /application\/json/);
-  
+
     const usersAfterPost = await helper.usersInDb();
-  
+
     expect(usersAfterPost.length).toBe(helper.initialUsers.length + 1);
-  
+
     const usernames = usersAfterPost.map(user => user.username);
     expect(usernames).toContain('tosiTestaaja');
   });
