@@ -7,6 +7,18 @@
     {
       "content": "best feature ever <3",
       "id": 2
+    },
+    {
+      "content": "testi",
+      "id": 3
+    },
+    {
+      "content": "uusi",
+      "id": 4
+    },
+    {
+      "content": "uusi Note WUU!",
+      "id": 5
     }
   ],
   "persons": [
@@ -14,6 +26,21 @@
       "name": "mluukkai",
       "number": "040-5483923",
       "id": 1
+    },
+    {
+      "name": "testi",
+      "number": "456456",
+      "id": 2
+    },
+    {
+      "name": "jorma",
+      "number": "456789",
+      "id": 3
+    },
+    {
+      "name": "jormeli",
+      "number": "789456123",
+      "id": 4
     }
   ]
 }
