@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useField } from './hooks'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -18,6 +19,9 @@ function App() {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const loginName = useField('text')
+  const loginPassword = useField('password')
 
   //lisäämiseen
   const [title, setTitle] = useState('')
@@ -120,7 +124,7 @@ function App() {
 
   if (user === null) {
     return (
-      <div>
+      <div className='loginView'>
 
         <Notification message={errorMessage} messageIsError={messageIsError} />
 
@@ -170,7 +174,7 @@ function App() {
         />
         <p></p>
       </Togglable>
-      <p>Blogeja yhteensä: {blogs.length}</p>
+      <p>Total number of blogs: {blogs.length}</p>
 
 
       {blogs
