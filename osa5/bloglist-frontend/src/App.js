@@ -17,11 +17,8 @@ function App() {
   const [errorMessage, setErrorMessage] = useState(null)
   const [messageIsError, setMessageIsError] = useState(true)
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
-  const loginName = useField('text')
-  const loginPassword = useField('password')
+  const username = useField('text')
+  const password = useField('password')
 
   //lisäämiseen
   const [title, setTitle] = useState('')
@@ -102,7 +99,8 @@ function App() {
 
     try {
       const user = await loginService.login({
-        username, password,
+        username: username.formWrapper.value,
+        password: password.formWrapper.value,
       })
 
       window.localStorage.setItem(
@@ -111,15 +109,16 @@ function App() {
 
       blogService.setToken(user.token)
 
+      username.reset()
+      password.reset()
+
       setUser(user)
-      setUsername('')
-      setPassword('')
+
     } catch (exception) {
       notify('Wrong credentials!', true)
+      username.reset()
+      password.reset()
     }
-
-
-
   }
 
   if (user === null) {
@@ -134,19 +133,13 @@ function App() {
           <div>
             username
             <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={( { target } ) => setUsername(target.value)}
+              {...username.formWrapper}
             />
           </div>
           <div>
             password
             <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={( { target } ) => setPassword(target.value)}
+              {...password.formWrapper}
             />
           </div>
           <button type="submit">login</button>
