@@ -6,6 +6,7 @@ import loginService from './services/login'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 function App() {
 
@@ -155,20 +156,24 @@ function App() {
       <h2>blogs</h2>
       <p>{user.name} logged in <button onClick={() => logOut()}>LOGOUT</button> </p>
 
-      <BlogForm 
-        handleSubmit={handleSubmit} 
-        handleTitleChange={handleTitleChange} 
-        handleAuthorChange={handleAuthorChange} 
-        handleUrlChange={handleUrlChange} 
-        title={title} 
-        author={author} 
-        url={url} 
-      />
-
+      <Togglable buttonLabel='new blog'>
+        <BlogForm 
+          handleSubmit={handleSubmit} 
+          handleTitleChange={handleTitleChange} 
+          handleAuthorChange={handleAuthorChange} 
+          handleUrlChange={handleUrlChange} 
+          title={title} 
+          author={author} 
+          url={url} 
+        />
+        <p></p>
+      </Togglable>
       <p>Blogeja yhteensä: {blogs.length}</p>
 
       
-      {blogs.map(blog => <Blog key={blog.id} blog={blog} /> 
+      {blogs
+      .sort((a, b) => (b.likes > a.likes) ? 1 : -1)
+      .map(blog => <Blog key={blog.id} blog={blog} setBlogs={setBlogs} blogs={blogs} user={user} /> 
       )}
 
     </div>
