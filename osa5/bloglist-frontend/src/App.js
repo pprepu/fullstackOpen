@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -48,12 +48,12 @@ function App() {
   }
 
   const logOut = () => {
-    
+
     window.localStorage.clear()
     setUser(null)
 
     notify('You have logged out!', false)
-    
+
   }
 
 
@@ -68,6 +68,8 @@ function App() {
 
     blogService.create(blogObject)
       .then(blog => {
+        blog.user = user
+
         setBlogs(blogs.concat(blog))
 
         setTitle('')
@@ -82,7 +84,7 @@ function App() {
         //setTitle('')
         //setAuthor('')
         //setUrl('')
-
+        console.log(error)
         notify('could not add a blog with provided fields!', true)
       })
   }
@@ -93,10 +95,10 @@ function App() {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
-        username, password, 
+        username, password,
       })
 
       window.localStorage.setItem(
@@ -112,7 +114,7 @@ function App() {
       notify('Wrong credentials!', true)
     }
 
-    
+
 
   }
 
@@ -126,21 +128,21 @@ function App() {
 
         <form onSubmit={handleLogin}>
           <div>
-            username 
-            <input 
-            type="text" 
-            value={username} 
-            name="Username" 
-            onChange={( {target} ) => setUsername(target.value)} 
+            username
+            <input
+              type="text"
+              value={username}
+              name="Username"
+              onChange={( { target } ) => setUsername(target.value)}
             />
           </div>
           <div>
-            password 
-            <input 
-            type="password" 
-            value={password} 
-            name="Password" 
-            onChange={( {target} ) => setPassword(target.value)} 
+            password
+            <input
+              type="password"
+              value={password}
+              name="Password"
+              onChange={( { target } ) => setPassword(target.value)}
             />
           </div>
           <button type="submit">login</button>
@@ -157,24 +159,24 @@ function App() {
       <p>{user.name} logged in <button onClick={() => logOut()}>LOGOUT</button> </p>
 
       <Togglable buttonLabel='new blog'>
-        <BlogForm 
-          handleSubmit={handleSubmit} 
-          handleTitleChange={handleTitleChange} 
-          handleAuthorChange={handleAuthorChange} 
-          handleUrlChange={handleUrlChange} 
-          title={title} 
-          author={author} 
-          url={url} 
+        <BlogForm
+          handleSubmit={handleSubmit}
+          handleTitleChange={handleTitleChange}
+          handleAuthorChange={handleAuthorChange}
+          handleUrlChange={handleUrlChange}
+          title={title}
+          author={author}
+          url={url}
         />
         <p></p>
       </Togglable>
       <p>Blogeja yhteensä: {blogs.length}</p>
 
-      
+
       {blogs
-      .sort((a, b) => (b.likes > a.likes) ? 1 : -1)
-      .map(blog => <Blog key={blog.id} blog={blog} setBlogs={setBlogs} blogs={blogs} user={user} /> 
-      )}
+        .sort((a, b) => (b.likes >= a.likes) ? 1 : -1)
+        .map(blog => <Blog key={blog.id} blog={blog} setBlogs={setBlogs} blogs={blogs} user={user} />
+        )}
 
     </div>
   )

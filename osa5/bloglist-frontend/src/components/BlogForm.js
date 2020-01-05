@@ -1,7 +1,7 @@
 import React from 'react'
 
-const BlogForm = ({handleSubmit, handleTitleChange, handleAuthorChange, handleUrlChange, 
-  title, author, url}) => {
+const BlogForm = ({ handleSubmit, handleTitleChange, handleAuthorChange, handleUrlChange,
+  title, author, url }) => {
 
   return (
     <div>

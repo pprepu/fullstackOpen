@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Notification = ({ message, messageIsError }) => {
 
@@ -7,25 +8,25 @@ const Notification = ({ message, messageIsError }) => {
   }
 
   const standardStyle = {
-    color: "green",
-    background: "lightgrey",
+    color: 'green',
+    background: 'lightgrey',
     fontSize: 20,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
-    textAlign: "center"
+    textAlign: 'center'
   }
 
   const errorStyle = {
-    color: "red",
-    background: "lightgrey",
+    color: 'red',
+    background: 'lightgrey',
     fontSize: 20,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
-    textAlign: "center"
+    textAlign: 'center'
   }
   let style
   if (messageIsError) {
@@ -39,6 +40,10 @@ const Notification = ({ message, messageIsError }) => {
       {message}
     </div>
   )
+}
+
+Notification.propTypes = {
+  messageIsError: PropTypes.bool.isRequired
 }
 
 export default Notification

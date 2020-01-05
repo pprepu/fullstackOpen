@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/5e10f696b19d3f0e9425ed9e
+Content-Type: application/json
+
+{
+    "title": "UPDATED BLOG222",
+    "author": "jormaee",
+    "url": "www.jorma.fi",
+    "likes": 0
+}
