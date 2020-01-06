@@ -15,16 +15,21 @@ export const messageChange = message => {
 }
 
 export const setNotification = (message, time) => {
+  const waitingTime = time * 1000
+  console.log('wTime: ', waitingTime)
   return async dispatch => {
     //tee jotain
-    dispatch({
+    
+    await dispatch({
       type: 'SET_MSG',
       message
     })
-    setTimeout(dispatch({
+    
+    setTimeout(() => dispatch({
       type: 'SET_MSG',
       message: ''
-    }), time * 1000)
+    }), waitingTime)
+
   }
 }
 

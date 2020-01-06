@@ -6,25 +6,18 @@ import {
 } from '../reducers/anecdoteReducer'
 
 import {
-  messageChange
+  setNotification
 } from '../reducers/messageReducer'
 
 const AnecdoteForm = (props) => {
 
-  const showNotification = message => {
-    props.messageChange(message)
-  
-    setTimeout(() => props.messageChange(''), 5000)
-  
-  }
   const addNew = async (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
     props.addAnecdote(content)
 
-    showNotification(`you added "${content}"`)
-  }
+    props.setNotification(`you added "${content}"`, 5)  }
 
   return (
     <div>
@@ -39,7 +32,7 @@ const AnecdoteForm = (props) => {
 
 const mapDispatchToProps = {
   addAnecdote,
-  messageChange
+  setNotification
 }
 
 const ConnectedAnecdoteForm = connect(
