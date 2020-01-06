@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux'
 import {
   addVote
 } from '../reducers/anecdoteReducer'
@@ -7,28 +8,23 @@ import {
 } from '../reducers/messageReducer'
 
 const AnecdoteList = (props) => {
-  const anecdotes = props.store.getState().anecdotes
 
   const showNotification = message => {
-    props.store.dispatch(messageChange(message))
+    props.messageChange(message)
   
-    setTimeout(() => props.store.dispatch(messageChange('')), 5000)
+    setTimeout(() => props.messageChange(''), 5000)
   
   }
   
   const vote = (id, content) => {
-    props.store.dispatch(addVote(id))
+    props.addVote(id)
     showNotification(`you voted "${content}"`)
   }
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes
-      .sort((a, b) => a.content > b.content ? -1 : 1)
-      .sort((a, b) => a.votes >= b.votes ? -1 : 1)
-      .filter(anecdote => anecdote.content.toUpperCase()
-        .includes(props.store.getState().filter.toUpperCase()))
+      {props.visibleAnecdotes
       .map(anecdote =>
         <div key={anecdote.id}>
           <div>
@@ -45,4 +41,28 @@ const AnecdoteList = (props) => {
   )
 }
 
-export default AnecdoteList
+const anecdotesToShow = ({ anecdotes, filter }) => {
+  return anecdotes
+  .sort((a, b) => a.content > b.content ? -1 : 1)
+  .sort((a, b) => a.votes >= b.votes ? -1 : 1)
+  .filter(anecdote => anecdote.content.toUpperCase()
+    .includes(filter.toUpperCase()))
+}
+
+const mapStateToProps = (state) => {
+  return {
+    visibleAnecdotes: anecdotesToShow(state)
+  }
+}
+
+const mapDispatchToProps = {
+  addVote,
+  messageChange
+}
+
+const ConnectedAnecdoteList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+  )(AnecdoteList)
+
+export default ConnectedAnecdoteList

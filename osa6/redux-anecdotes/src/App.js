@@ -5,14 +5,16 @@ import Notification from './components/Notification'
 import Filter from './components/Filter'
 
 const App = (props) => {
+  
   return (
     <div>
-      <Notification store={props.store} />
-      <Filter store={props.store} />
-      <AnecdoteList store={props.store} />
-      <AnecdoteForm store={props.store} />
+      <Notification />
+      <Filter />
+      <AnecdoteList />
+      <AnecdoteForm />
     </div>
   )
+
 }
 
 export default App
