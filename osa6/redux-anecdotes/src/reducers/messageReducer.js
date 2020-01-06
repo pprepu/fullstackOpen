@@ -14,5 +14,19 @@ export const messageChange = message => {
   }
 }
 
+export const setNotification = (message, time) => {
+  return async dispatch => {
+    //tee jotain
+    dispatch({
+      type: 'SET_MSG',
+      message
+    })
+    setTimeout(dispatch({
+      type: 'SET_MSG',
+      message: ''
+    }), time * 1000)
+  }
+}
+
 
 export default messageReducer

@@ -4,21 +4,14 @@ import {
   addVote
 } from '../reducers/anecdoteReducer'
 import {
-  messageChange
+  setNotification
 } from '../reducers/messageReducer'
 
 const AnecdoteList = (props) => {
-
-  const showNotification = message => {
-    props.messageChange(message)
   
-    setTimeout(() => props.messageChange(''), 5000)
-  
-  }
-  
-  const vote = (id, content) => {
-    props.addVote(id)
-    showNotification(`you voted "${content}"`)
+  const vote = (anecdote) => {
+    props.addVote(anecdote)
+    props.setNotification(`you voted "${anecdote.content}"`, 5)
   }
 
   return (
@@ -32,7 +25,7 @@ const AnecdoteList = (props) => {
           </div>
           <div>
             has {anecdote.votes} votes
-            <button onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
+            <button onClick={() => vote(anecdote)}>vote</button>
           </div>
         </div>
       )
@@ -57,7 +50,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   addVote,
-  messageChange
+  setNotification
 }
 
 const ConnectedAnecdoteList = connect(

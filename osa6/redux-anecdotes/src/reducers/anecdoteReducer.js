@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdotes'
+
 /*
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -18,26 +20,37 @@ const asObject = (anecdote) => {
   }
 }
 */
-export const addVote = (id) => {
-  return { 
-    type: 'VOTE',  
-    data: { id }
+export const addVote = (anecdote) => {
+  return async dispatch => {
+    const updatedAnecdote = {...anecdote, votes: anecdote.votes + 1}
+    const res = await anecdoteService.update(anecdote.id, updatedAnecdote)
+    console.log(res)
+    dispatch({
+      type: 'VOTE',
+      data: { id: res.id }
+    })
   }
 }
 
 export const addAnecdote = (data) => {
-  return { 
-    type: 'ADD', 
-    data 
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createAnecdote(data)
+    dispatch({ 
+      type: 'ADD', 
+      data: newAnecdote
+    })
   }
 }
 
 //const initialState = anecdotesAtStart.map(asObject)
 
-export const initializeAnecdotes = anecdotes => {
-  return {
-    type: 'INIT_ANECDOTES',
-    data: anecdotes
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: 'INIT_ANECDOTES',
+      data: anecdotes
+    })
   }
 }
 

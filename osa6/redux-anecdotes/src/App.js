@@ -11,8 +11,7 @@ const App = (props) => {
 
   useEffect(() => {
     console.log('getting anecdotes from server...')
-    anecdoteService
-      .getAll().then(anecdotes => props.initializeAnecdotes(anecdotes))
+    props.initializeAnecdotes()
   }, [])
   
   return (
