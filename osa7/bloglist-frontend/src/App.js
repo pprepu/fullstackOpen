@@ -6,6 +6,7 @@ import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useField } from './hooks'
+import { connect } from 'react-redux'
 
 import { notificationChange } from './reducers/notificationReducer'
 
@@ -31,13 +32,13 @@ const App = (props) => {
   }, [])
 
   const notify = (message, type = 'success') => {
-    console.log(props.store.getState())
+    console.log(props.notification)
     if (type === 'success') {
-      props.store.dispatch(notificationChange(message, false))
-      setTimeout(() => props.store.dispatch(notificationChange('', false)), 5000)
+      props.notificationChange(message, false)
+      setTimeout(() => props.notificationChange('', false), 5000)
     } else {
-      props.store.dispatch(notificationChange(message, true))
-      setTimeout(() => props.store.dispatch(notificationChange('', true)), 5000)
+      props.notificationChange(message, true)
+      setTimeout(() => props.notificationChange('', true), 5000)
     }
   }
 
@@ -91,7 +92,7 @@ const App = (props) => {
       <div>
         <h2>log in to application</h2>
 
-        <Notification store={props.store} />
+        <Notification />
 
         <form onSubmit={handleLogin}>
           <div>
@@ -116,7 +117,7 @@ const App = (props) => {
     <div>
       <h2>blogs</h2>
 
-      <Notification store={props.store} />
+      <Notification />
 
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
@@ -139,4 +140,14 @@ const App = (props) => {
   )
 }
 
-export default App
+const mapStateToProps = state => {
+  return {
+    notification: state.notification
+  }
+}
+
+const mapDispatchToProps = {
+  notificationChange
+}
+const connectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
+export default connectedApp
