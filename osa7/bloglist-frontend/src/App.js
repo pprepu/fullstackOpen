@@ -6,7 +6,6 @@ import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import Users from './components/Users'
 import UserInfo from './components/UserInfo'
-import BlogInfo from './components/BlogInfo'
 import Togglable from './components/Togglable'
 import { useField } from './hooks'
 import { connect } from 'react-redux'
@@ -16,9 +15,12 @@ import { initializeBlogs } from './reducers/blogReducer'
 import { login, logout } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
 
+//styles
+import { Container, Menu, Button } from 'semantic-ui-react'
+
 import {
   BrowserRouter as Router,
-  Route, Link, Redirect, withRouter
+  Route, Link
 } from 'react-router-dom'
 
 const App = (props) => {
@@ -75,23 +77,23 @@ const App = (props) => {
 
   if (props.user === null) {
     return (
-      <div>
+      <Container>
         <h2>log in to application</h2>
 
         <Notification />
 
         <form onSubmit={handleLogin}>
           <div>
-            käyttäjätunnus
-            <input {...username}/>
+            username
+            <input data-cy="username" {...username}/>
           </div>
           <div>
-            salasana
-            <input {...password} />
+            password
+            <input data-cy="password" {...password} />
           </div>
-          <button type="submit">kirjaudu</button>
+          <button type="submit" data-cy="submit">login</button>
         </form>
-      </div>
+      </Container>
     )
   }
 
@@ -115,43 +117,63 @@ const App = (props) => {
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
   return (
-    <div>
-      <h2>blogs</h2>
-
-      <Notification />
-
-      <p>{props.user.name} logged in</p>
-      <button onClick={handleLogout}>logout</button>
+    <Container>
       <Router>
+        <div>
+          <Menu inverted>
+            <Menu.Item link>
+              <Link to="/">blogs</Link>
+            </Menu.Item>
+            <Menu.Item link>
+              <Link to="/users">users</Link>
+            </Menu.Item>
+            <Menu.Item link>
+              {props.user
+                ? <em>{props.user.name} logged in</em>
+                : <Link to="/login">login</Link>
+              }
+            </Menu.Item>
+            <Menu.Item>
+              <Button onClick={handleLogout}>logout</Button>
+            </Menu.Item>
+          </Menu>
+        </div>
+        <div>
+          <Notification />
+        </div>
         <Route exact path="/" render={ () => (
           <div>
+            <h2>blogs</h2>
             <Togglable buttonLabel='create new' ref={newBlogRef}>
               <NewBlog notify={notify} />
             </Togglable>
 
-            {props.blogs.sort(byLikes).map(blog =>
-              <Blog
-                key={blog.id}
-                blog={blog}
-                creator={blog.user.username === props.user.username}
-                notify={notify}
-              />
-            )}
+            <ul>
+              {props.blogs.sort(byLikes).map(blog =>
+                <li key={blog.id}><Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author} </Link></li>
+              )}
+            </ul>
           </div>
         )} />
         <Route exact path="/users" render={() => <Users />} />
         <Route exact path="/users/:id" render={ ({ match }) =>
           <UserInfo user={userById(match.params.id)} />
         } />
-        <Route exact path="/blogs/:id" render={ ({ match }) =>
-          <BlogInfo blog={blogById(match.params.id)} />
+        <Route exact path="/blogs/:id" render={ ({ match }) => {
+          const currentBlog = blogById(match.params.id)
+          return (
+            <Blog
+              blog={currentBlog}
+              notify={notify} />
+          )
+        }
         } />
       </Router>
-    </div>
+    </Container>
 
   )
 }
-
+//
 const mapStateToProps = state => {
   return {
     notification: state.notification,

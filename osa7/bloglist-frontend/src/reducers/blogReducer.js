@@ -34,7 +34,7 @@ export const initializeBlogs = () => {
 export const createBlog = (blog) => {
   return async dispatch => {
     const createdBlog = await blogService.create(blog)
-    console.log(createdBlog)
+    // console.log(createdBlog)
     dispatch({
       type: 'NEW_BLOG',
       data: createdBlog
@@ -46,7 +46,7 @@ export const likeBlog = (blog, user) => {
   return async dispatch => {
     const likedBlog = { ...blog, likes: blog.likes + 1 }
     const updatedBlog = await blogService.update(likedBlog)
-    console.log('updblog1 ', updatedBlog)
+    // console.log('updblog1 ', updatedBlog)
     updatedBlog.user = user
 
     dispatch({
@@ -57,19 +57,15 @@ export const likeBlog = (blog, user) => {
 }
 
 export const removeBlog = (blog) => {
-  const ok = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
-  if (ok) {
-    return async dispatch => {
-      //const updatedBlog = await blogService.remove(blog)
-      console.log('at remove, blog: ', blog)
-      dispatch({
-        type: 'REMOVE_BLOG',
-        data: blog
-      })
-    }
+  return async dispatch => {
+    const updatedBlog = await blogService.remove(blog)
+    // console.log('at remove, blog: ', blog)
+    dispatch({
+      type: 'REMOVE_BLOG',
+      data: blog
+    })
   }
+
 }
-
-
 
 export default blogReducer

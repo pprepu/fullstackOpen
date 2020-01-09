@@ -1,11 +1,22 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { connect } from 'react-redux'
 
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 
+//styles
+import { Button } from 'semantic-ui-react'
+
 const Blog = (props) => {
-  const [expanded, setExpanded] = useState(false)
+
+  if (!props.blog) {
+    return (
+      <div>
+        <p>loading... or not a valid id</p>
+      </div>
+    )
+  }
+
+  const creator = props.blog.user.username === props.user.username
 
   const blogStyle = {
     paddingTop: 10,
@@ -21,35 +32,32 @@ const Blog = (props) => {
   }
 
   const removeB = () => {
-    props.removeBlog(props.blog)
-    props.notify(`blog ${props.blog.title} by ${props.blog.author} removed`)
+    const ok = window.confirm(`remove blog ${props.blog.title} by ${props.blog.author}`)
+    if (ok) {
+      props.removeBlog(props.blog)
+      props.notify(`blog ${props.blog.title} by ${props.blog.author} removed`)
+    }
   }
 
   const details = () => (
     <div className='details'>
       <a href={props.blog.url}>{props.blog.url}</a>
       <div>{props.blog.likes} likes
-        <button onClick={() => likeB()}>like</button>
+        <button data-cy="like" onClick={() => likeB()}>like</button>
       </div>
       <div>added by {props.blog.user.name}</div>
-      {props.creator &&(<button onClick={() => removeB()}>remove </button>)}
+      {creator &&(<Button onClick={() => removeB()}>remove </Button>)}
     </div>
   )
 
   return (
     <div style={blogStyle}>
-      <div onClick={() => setExpanded(!expanded)} className='name'>
-        {props.blog.title} {props.blog.author}
-      </div>
-      {expanded && details()}
+      <h3 className='name'>
+        {props.blog.title} by {props.blog.author}
+      </h3>
+      {details()}
     </div>
   )}
-
-
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  creator: PropTypes.bool.isRequired
-}
 
 const mapStateToProps = state => {
   return {
