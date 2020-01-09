@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
-const Blog = ({ blog, like, remove, creator }) => {
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
+
+const Blog = (props) => {
   const [expanded, setExpanded] = useState(false)
 
   const blogStyle = {
@@ -12,21 +15,31 @@ const Blog = ({ blog, like, remove, creator }) => {
     marginBottom: 5
   }
 
+  const likeB = () => {
+    props.likeBlog(props.blog, props.blog.user)
+    props.notify(`blog ${props.blog.title} by ${props.blog.author} liked!`)
+  }
+
+  const removeB = () => {
+    props.removeBlog(props.blog)
+    props.notify(`blog ${props.blog.title} by ${props.blog.author} removed`)
+  }
+
   const details = () => (
     <div className='details'>
-      <a href={blog.url}>{blog.url}</a>
-      <div>{blog.likes} likes
-        <button onClick={() => like(blog)}>like</button>
+      <a href={props.blog.url}>{props.blog.url}</a>
+      <div>{props.blog.likes} likes
+        <button onClick={() => likeB()}>like</button>
       </div>
-      <div>added by {blog.user.name}</div>
-      {creator &&(<button onClick={() => remove(blog)}>remove </button>)}
+      <div>added by {props.blog.user.name}</div>
+      {props.creator &&(<button onClick={() => removeB()}>remove </button>)}
     </div>
   )
 
   return (
     <div style={blogStyle}>
       <div onClick={() => setExpanded(!expanded)} className='name'>
-        {blog.title} {blog.author}
+        {props.blog.title} {props.blog.author}
       </div>
       {expanded && details()}
     </div>
@@ -35,9 +48,17 @@ const Blog = ({ blog, like, remove, creator }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  like: PropTypes.func.isRequired,
-  remove: PropTypes.func.isRequired,
   creator: PropTypes.bool.isRequired
 }
 
-export default Blog
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  }
+}
+
+const mapDispatchToProps = {
+  likeBlog, removeBlog
+}
+const connectedBlog = connect(mapStateToProps, mapDispatchToProps)(Blog)
+export default connectedBlog

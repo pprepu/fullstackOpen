@@ -14,5 +14,4 @@ export const notificationChange = (message, error) => {
   }
 }
 
-
 export default notificationReducer

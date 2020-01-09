@@ -1,5 +1,7 @@
 import React from 'react'
 import { useField } from '../hooks'
+import { connect } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
 
 const NewBlog = (props) => {
   const [title, titleReset] = useField('text')
@@ -13,6 +15,7 @@ const NewBlog = (props) => {
       author: author.value,
       url: url.value
     })
+    props.notify(`blog ${title.value} by ${author.value} created`)
     titleReset()
     authorReset()
     urlReset()
@@ -41,4 +44,8 @@ const NewBlog = (props) => {
   )
 }
 
-export default NewBlog
+const mapDispatchToProps = {
+  createBlog
+}
+const connectedNewBlog = connect(null, mapDispatchToProps)(NewBlog)
+export default connectedNewBlog
