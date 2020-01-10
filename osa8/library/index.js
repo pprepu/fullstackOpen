@@ -107,8 +107,8 @@ const resolvers = {
     allBooks: async (root, args) => {
 
       const allBooks = await Book.find({}).populate('author')
-      console.log(allBooks)
-      allBooks.forEach(b => console.log(b.author))
+      // console.log(allBooks)
+      // allBooks.forEach(b => console.log(b.author))
       if (!args.genre) {
         return allBooks
       }
