@@ -3,7 +3,7 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import { gql } from 'apollo-boost'
-import { Query, Mutation, useMutation, useApolloClient } from 'react-apollo'
+import { Query, Mutation, useSubscription, useApolloClient } from 'react-apollo'
 import LoginForm from './components/LoginForm'
 import Recommend from './components/Recommend'
 
@@ -11,6 +11,25 @@ import Recommend from './components/Recommend'
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
+
+  const BOOK_DETAILS = gql`
+fragment BookDetails on Book {
+  title
+  author {
+    name 
+  }
+}
+`
+
+  const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+  
+${BOOK_DETAILS}
+`
 
   const ALL_AUTHORS = gql`
   {
@@ -77,6 +96,12 @@ query {
   // const [login] = useMutation(LOGIN, {
   //   onError: handleError
   // })
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      window.alert(`${subscriptionData.data.bookAdded.title} by ${subscriptionData.data.bookAdded.author.name} added!`)
+    }
+  })
 
   return (
     <div>

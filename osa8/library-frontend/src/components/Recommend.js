@@ -11,6 +11,11 @@ const Recommend = (props) => {
   if (props.result.loading) {
     return <div>loading...</div>
   }
+  const user = props.result.data.me
+
+  if (!user) {
+    return <div><p>hmm</p></div>
+  }
 
   const ALL_BOOKS = gql`
   {
@@ -24,8 +29,6 @@ const Recommend = (props) => {
     }
   }
   `
-
-  const user = props.result.data.me
   
   // const FILTERED_BOOKS = gql`
   
@@ -41,7 +44,7 @@ const Recommend = (props) => {
   //   }
   // `
 
-  // console.log('user', user)
+  console.log('user', user)
   return (
     <div>
       <h2>recommendations</h2>
